@@ -1,6 +1,9 @@
 package com.example.testlib
 
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import com.example.logic.StudentGame
 
 class testStudentGame {
     lateinit var defaultStudentGame: StudentGame
