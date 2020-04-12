@@ -14,12 +14,12 @@ class StudentGame (columns: Int = 7, rows: Int = 10
     //Optional addition to the interface
     var playerTurn: Int = 1
 
-    /*init {
+    init {
         // Place a couple of random tokens to test the user interface
         mData[5][5] = 1
         mData[6][3] = 2
     }
-    */
+
 
     //Implement the getToken function:
     //Returns the game board state at a specified column and row number
@@ -33,6 +33,11 @@ class StudentGame (columns: Int = 7, rows: Int = 10
         if (player <= 0) {
             throw IllegalArgumentException("Player numbers start with 1")
         }
+
+        if (playerTurn == 1)
+            playerTurn = 2
+        else
+            playerTurn = 1
 
         for (row in 0 until mRows) {
             if (mData[column][row] === 0) {
