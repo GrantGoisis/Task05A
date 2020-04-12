@@ -6,18 +6,21 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import com.example.logic.StudentGame
 
 class GameView: View {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) :
-super(context, attrs, defStyleAttr)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    private val colCount = 7
-    private val rowCount = 12
+    private var mStudentGame: StudentGame = StudentGame(10,12)
+    private val colCount = mStudentGame.mColumns
+    private val rowCount = mStudentGame.mRows
 
     private var mGridPaint: Paint
     private var mNoPlayerPaint: Paint
+    private var mPlayer1Paint: Paint
+    private var mPlayer2Paint: Paint
 
     init {
         mGridPaint = Paint().apply {
@@ -28,6 +31,16 @@ super(context, attrs, defStyleAttr)
         mNoPlayerPaint = Paint().apply {
             style = Paint.Style.FILL
             color = Color.WHITE
+        }
+
+        mPlayer1Paint = Paint().apply {
+            style = Paint.Style.FILL
+            color = Color.RED
+        }
+
+        mPlayer2Paint = Paint().apply {
+            style = Paint.Style.FILL
+            color = Color.YELLOW
         }
     }
 
@@ -45,10 +58,7 @@ super(context, attrs, defStyleAttr)
         val diameterY: Float = viewHeight / rowCount.toFloat()
 
         //To choose smallest of the 2:
-        if (diameterX < diameterY)
-            chosenDiameter = diameterX
-        else
-            chosenDiameter = diameterY
+        chosenDiameter = if (diameterX < diameterY) diameterX else diameterY
 
         //Draw the gameboard
         canvas.drawRect(0.toFloat(), 0.toFloat(), viewWidth, viewHeight, mGridPaint)
@@ -58,10 +68,17 @@ super(context, attrs, defStyleAttr)
         //Draw the circles on gameboard
         for (col in 0 until colCount) {
             for (row in 0 until rowCount) {
+                // Does the game array contain a piece at this location?
+                tokenAtPos = mStudentGame.getToken(col, row)
 
-                paint = mNoPlayerPaint
+                // Choose the correct colour for the circle
+                paint = when (tokenAtPos) {
+                    1 -> mPlayer1Paint
+                    2 -> mPlayer2Paint
+                    else -> mNoPlayerPaint
+                }
 
-                //Calculate coords of the circle
+                //Calculate cords of the circle
                 val cx = chosenDiameter * col + radius
                 val cy = chosenDiameter * row + radius
 
